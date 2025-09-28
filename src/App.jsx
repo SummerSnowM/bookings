@@ -12,7 +12,7 @@ export default function App() {
       <>
         <Navbar style={{ backgroundColor: '#faebd7' }}>
           <Container>
-            <Navbar.Brand href='/landing'><strong>Office Fusion</strong></Navbar.Brand>
+            <Navbar.Brand href='/'><strong>Office Fusion</strong></Navbar.Brand>
             <Nav className='me-auto'>
               <Nav.Link>Home</Nav.Link>
               <Nav.Link>Bookings</Nav.Link>
@@ -31,7 +31,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Layout />}>
-          <Route path='landing' element={<LandingPage />} />
+          <Route index element={<LandingPage />} />
           <Route path='login' element={<Login />} />
         </Route>
       </Routes>
