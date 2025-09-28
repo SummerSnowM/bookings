@@ -17,6 +17,17 @@ export default function Login() {
     const handleLogin = (e) => {
         e.preventDefault();
         //todo
+        const data = {
+            username: loginUsername,
+            password: loginPassword
+        }
+
+        axios.post(`https://f15abb20-13e0-45b3-8ffd-8c40cea5bb9e-00-3gahccidclukm.sisko.replit.dev/login`, data)
+            .then((response) => console.log(response.data))
+            .catch((error) => console.log(error));
+
+        setLoginUsername("");
+        setLoginPassword("");
     };
 
     //submit sign up form
