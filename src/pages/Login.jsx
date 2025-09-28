@@ -87,10 +87,10 @@ export default function Login() {
     //login form
     return (
         <>
-            <Container className='d-flex justify-content-center align-items-center' fluid>
+            <Container className='d-flex justify-content-center align-items-center'>
                 <Row className='mt-5 mb-5 bg-light rounded-5 p-3'>
                     <Col xs={6}>
-                        <Image src='/src/assets/logo.png' style={{ height: '170px', width: '300px' }} />
+                        <Image src='/src/assets/logo.png' style={{ height: '110px', width: '210px' }} />
                         <Form onSubmit={handleLogin}>
                             <h2 className='mt-0 mb-3'>Login Account</h2>
                             <Form.Group className='mt-3'>
@@ -121,7 +121,7 @@ export default function Login() {
                         </Form>
                     </Col>
                     <Col xs={6}>
-                        <Image src='/src/assets/coworking-wallpaper.jpg' style={{ height: '600px', width: '600px' }} />
+                        <Image className='mt-3' src='/src/assets/coworking-wallpaper.jpg' style={{ maxHeight: '100%', width: '100%' }} />
                     </Col>
                 </Row>
             </Container>
