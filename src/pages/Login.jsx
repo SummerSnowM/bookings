@@ -1,58 +1,49 @@
 import { Container, Row, Col, Image, Form, Button, Modal } from 'react-bootstrap';
-import { useState } from 'react';
-import axios from 'axios';
+
+import {
+    createUserWithEmailAndPassword,
+    getAuth,
+    signInWithEmailAndPassword,
+} from 'firebase/auth'
+import { useState, useContext, useEffect } from 'react';
+import { AuthContext } from '../components/AuthProvider';
+import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-    const [loginUsername, setLoginUsername] = useState("");
-    const [loginPassword, setLoginPassword] = useState("");
-
-    const [signUpUsername, setSignUpUsername] = useState("");
-    const [signUpPassword, setSignUpPassword] = useState("");
+    const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
-    const [phoneNum, setPhoneNum] = useState("");
-
     const [showModal, setShowModal] = useState(false);
 
+    const navigate = useNavigate();
+    const auth = getAuth();
+    const { currentUser } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (currentUser) navigate('/home');
+    }, [currentUser, navigate])
+
     //submit login form
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
-        //todo
-        const data = {
-            username: loginUsername,
-            password: loginPassword
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+        } catch (error) {
+            console.error(error);
         }
-
-        axios.post(`https://f15abb20-13e0-45b3-8ffd-8c40cea5bb9e-00-3gahccidclukm.sisko.replit.dev/login`, data)
-            .then((response) => console.log(response.data))
-            .catch((error) => console.log(error));
-
-        setLoginUsername("");
-        setLoginPassword("");
     };
 
     //submit sign up form
-    const handleSignUp = () => {
-        //create data body
-        const data = {
-            username: signUpUsername,
-            password: signUpPassword,
-            email,
-            phoneNum
+    const handleSignUp = async () => {
+        try {
+            const res = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+            console.log(res.user);
+        } catch (error) {
+            console.error(error);
         }
-
-        //api post data
-        axios.post(`https://f15abb20-13e0-45b3-8ffd-8c40cea5bb9e-00-3gahccidclukm.sisko.replit.dev/signup`, data)
-            .then((response) => console.log(response.data))
-            .catch((error) => console.log(error));
-
-        //reinitialize values back to default
-        setSignUpUsername('');
-        setSignUpPassword('');
-        setEmail('');
-        setPhoneNum('');
-
-        //close the sign up window
-        setShowModal(false);
     }
 
     //login form
@@ -65,11 +56,11 @@ export default function Login() {
                         <Form onSubmit={handleLogin}>
                             <h2 className='mt-0 mb-3'>Login Account</h2>
                             <Form.Group className='mt-3'>
-                                <Form.Label>Username</Form.Label>
+                                <Form.Label>Email</Form.Label>
                                 <Form.Control
                                     type='text'
-                                    onChange={e => setLoginUsername(e.target.value)}
-                                    value={loginUsername}
+                                    onChange={e => setEmail(e.target.value)}
+                                    value={email}
                                 />
                             </Form.Group>
 
@@ -77,8 +68,8 @@ export default function Login() {
                                 <Form.Label>Password</Form.Label>
                                 <Form.Control
                                     type='password'
-                                    onChange={e => setLoginPassword(e.target.value)}
-                                    value={loginPassword}
+                                    onChange={e => setPassword(e.target.value)}
+                                    value={password}
                                 />
                             </Form.Group>
 
@@ -102,32 +93,11 @@ export default function Login() {
                 show={showModal}
                 size='lg'
                 onHide={() => setShowModal(false)}
-                animation={false}
                 centered>
                 <Modal.Header closeButton>
                     <Modal.Title>Sign Up New Account</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <Form.Group>
-                        <Form.Label>New Username</Form.Label>
-                        <Form.Control
-                            type="text"
-                            onChange={(e) => setSignUpUsername(e.target.value)}
-                            value={signUpUsername}
-                            required
-                        />
-                    </Form.Group>
-
-                    <Form.Group>
-                        <Form.Label>New Password</Form.Label>
-                        <Form.Control
-                            type="password"
-                            onChange={(e) => setSignUpPassword(e.target.value)}
-                            value={signUpPassword}
-                            required
-                        />
-                    </Form.Group>
-
                     <Form.Group>
                         <Form.Label>Email Address</Form.Label>
                         <Form.Control
@@ -139,19 +109,17 @@ export default function Login() {
                     </Form.Group>
 
                     <Form.Group>
-                        <Form.Label>Contact Number</Form.Label>
+                        <Form.Label>New Password</Form.Label>
                         <Form.Control
-                            type="text"
-                            onChange={(e) => setPhoneNum(e.target.value)}
-                            value={phoneNum}
+                            type="password"
+                            onChange={(e) => setPassword(e.target.value)}
+                            value={password}
                             required
                         />
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={() => {
-                        handleSignUp();
-                    }}>
+                    <Button onClick={handleSignUp}>
                         Create Account
                     </Button>
                 </Modal.Footer>
