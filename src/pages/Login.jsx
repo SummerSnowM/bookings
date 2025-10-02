@@ -1,5 +1,6 @@
 import { Container, Row, Col, Image, Form, Button, Modal } from 'react-bootstrap';
 
+import axios from 'axios';
 import {
     createUserWithEmailAndPassword,
     getAuth,
@@ -12,6 +13,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Login() {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
+    const [file, setFile] = useState(null)
     const [showModal, setShowModal] = useState(false);
 
     const navigate = useNavigate();
@@ -32,8 +34,10 @@ export default function Login() {
         }
     };
 
+    const BASE_URL = `https://f15abb20-13e0-45b3-8ffd-8c40cea5bb9e-00-3gahccidclukm.sisko.replit.dev`;
     //submit sign up form
     const handleSignUp = async () => {
+        console.log(file);
         try {
             const res = await createUserWithEmailAndPassword(
                 auth,
@@ -41,6 +45,26 @@ export default function Login() {
                 password
             );
             console.log(res.user);
+
+            //upload img to backend folder
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const uploadImg = await fetch(`${BASE_URL}/upload`, {
+                method: 'POST',
+                body: formData,
+            })
+            const data = await uploadImg.json();
+            console.log("uploaded", data);
+
+            //store filepath and other displayed data to db
+            axios.post(`${BASE_URL}/signup`, {
+                email,
+                filepath: data.fileUrl
+            })
+                .then((response) => console.log(response.data))
+                .catch((error) => console.error(error));
+
         } catch (error) {
             console.error(error);
         }
@@ -116,6 +140,11 @@ export default function Login() {
                             value={password}
                             required
                         />
+                    </Form.Group>
+
+                    <Form.Group controlId="formFile" className="mb-3">
+                        <Form.Label>Profile Image</Form.Label>
+                        <Form.Control type="file" onChange={(e) => setFile(e.target.files[0])} required />
                     </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
