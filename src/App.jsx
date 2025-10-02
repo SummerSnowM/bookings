@@ -3,7 +3,7 @@ import Login from './pages/Login'
 import Home from './pages/Home'
 import LandingPage from './pages/LandingPage'
 
-import { useContext } from 'react';
+import { useContext} from 'react';
 
 import { BrowserRouter, Routes, Route, Outlet, useNavigate, Link } from 'react-router-dom';
 import { Navbar, Container, Nav } from 'react-bootstrap';
@@ -31,7 +31,7 @@ export default function App() {
               <Nav.Link onClick={() => {
                 if (currentUser) {
                   auth.signOut()
-                  .then(() => navigate('/login'))
+                    .then(() => navigate('/login'))
                 } else {
                   navigate('/login')
                 }

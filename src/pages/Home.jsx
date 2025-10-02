@@ -3,15 +3,31 @@ import axios from 'axios';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../components/AuthProvider';
 
+import Bookings from '../components/Bookings'
+import History from '../components/History';
+
+export const BASE_URL = `https://f15abb20-13e0-45b3-8ffd-8c40cea5bb9e-00-3gahccidclukm.sisko.replit.dev`;
 export default function Home() {
-    const BASE_URL = `https://f15abb20-13e0-45b3-8ffd-8c40cea5bb9e-00-3gahccidclukm.sisko.replit.dev`;
+    // const BASE_URL = `https://f15abb20-13e0-45b3-8ffd-8c40cea5bb9e-00-3gahccidclukm.sisko.replit.dev`;
     const [image, setImage] = useState(null);
     const { currentUser } = useContext(AuthContext);
 
-    axios.get(`${BASE_URL}/images/${currentUser.email}`)
+    const [bookings, setBookings] = useState(false);
+    const [history, setHistory] = useState(false);
+
+    axios.get(`${BASE_URL}/images/${currentUser?.email}`)
         .then((response) => setImage(`${BASE_URL}${response.data.data.filepath}`))
         .catch((error) => console.log(error));
-    console.log(image)
+
+    const handleBookings = () => {
+        setHistory(false);
+        setBookings(true);
+    }
+
+    const handleHistory = () => {
+        setBookings(false);
+        setHistory(true);
+    }
 
     return (
         <>
@@ -30,14 +46,17 @@ export default function Home() {
                 <Row>
                     <Nav fill className='justify-content-center' variant="underline">
                         <Nav.Item>
-                            <Nav.Link className='text-dark'><strong>Bookings</strong></Nav.Link>
+                            <Nav.Link onClick={handleBookings} className='text-dark'><strong>Bookings</strong></Nav.Link>
                         </Nav.Item>
                         <Nav.Item>
-                            <Nav.Link className='text-dark'><strong>History</strong></Nav.Link>
+                            <Nav.Link onClick={handleHistory} className='text-dark'><strong>History</strong></Nav.Link>
                         </Nav.Item>
                     </Nav>
                     <hr className='mt-3' />
                 </Row>
+
+                {bookings && <Bookings />}
+                {history && <History />}
             </Container >
         </>
     )
