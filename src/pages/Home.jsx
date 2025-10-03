@@ -11,7 +11,7 @@ export const BASE_URL = `https://f15abb20-13e0-45b3-8ffd-8c40cea5bb9e-00-3gahcci
 export default function Home() {
     const { currentUser } = useContext(AuthContext);
 
-    const [bookings, setBookings] = useState(true);
+    const [bookings, setBookings] = useState([]);
     const [history, setHistory] = useState(false);
 
     const user = useSelector((state) => state.users);
@@ -28,7 +28,7 @@ export default function Home() {
     }
 
     useEffect(() => {
-        dispatch(fetchUser({ userId: currentUser.uid }));
+        dispatch(fetchUser({ userId: currentUser?.uid }));
     }, [currentUser, dispatch])
 
     return (
@@ -39,7 +39,6 @@ export default function Home() {
                         <Image src={user ? user.users.imageUrl : 'src/assets/blank-user.png'} style={{ height: '180px', width: '180px' }} roundedCircle />
                     </Col>
                     <Col sm={4}>
-                        {/* replace to username */}
                         <h3>Welcome back! {user.users.username}</h3>
                         <p>{user.users.username}@{currentUser?.email}</p>
                     </Col>
@@ -56,9 +55,8 @@ export default function Home() {
                     </Nav>
                     <hr className='mt-3' />
                 </Row>
-
-                {bookings && <Bookings email={currentUser.email} />}
-                {history && <History />}
+                {bookings && <Bookings email={currentUser?.email} />}
+                {history && <History email={currentUser?.email}/>}
             </Container >
         </>
     )

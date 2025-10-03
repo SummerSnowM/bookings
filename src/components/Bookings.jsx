@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { BASE_URL } from '../pages/Home';
 import axios from 'axios';
 
+import BookingPostCard from './BookingPostCard';
+
 export default function Bookings({ email }) {
     const [showModal, setShowModal] = useState(false);
     const [showToast, setShowToast] = useState(false);
@@ -18,13 +20,26 @@ export default function Bookings({ email }) {
     const [room, setRoom] = useState(null);
     const [rooms, setRooms] = useState([]);
 
+    const [bookings, setBookings] = useState([]);
+
+
     useEffect(() => {
+        //get all room types for adding new booking
         axios.get(`${BASE_URL}/roomtypes`)
             .then((response) => setRooms(response.data.data))
             .catch((error) => console.log(error));
-    }, [])
 
-    // const handleOpenToast = () => setShowToast(true);
+        //get all upcoming bookings
+        axios.post(`${BASE_URL}/bookings/upcoming`, {
+            "user_email": email
+        })
+            .then((response) => setBookings(response.data.data))
+            .catch((error) => console.error(error));
+
+
+
+    }, [email])
+
     const handleCloseToast = () => setShowToast(false);
 
     const handleAddBooking = (e) => {
@@ -70,6 +85,8 @@ export default function Bookings({ email }) {
         <>
             <Container>
                 <Button style={{ backgroundColor: '#D9B99B', border: '#D9B99B', color: 'black' }} onClick={() => setShowModal(true)}><strong>+ New Booking</strong></Button>
+                <br />
+                <BookingPostCard bookings={bookings} />
             </Container>
 
             <Modal
