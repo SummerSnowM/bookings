@@ -1,6 +1,8 @@
 import { Container, Row, Col, Image, Form, Button, Modal } from 'react-bootstrap';
 
-import axios from 'axios';
+// import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { saveUser } from '../features/usersSlice';
 import {
     createUserWithEmailAndPassword,
     getAuth,
@@ -13,9 +15,11 @@ import { useNavigate } from 'react-router-dom';
 export default function Login() {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [file, setFile] = useState(null)
     const [showModal, setShowModal] = useState(false);
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const auth = getAuth();
     const { currentUser } = useContext(AuthContext);
@@ -37,33 +41,34 @@ export default function Login() {
     const BASE_URL = `https://f15abb20-13e0-45b3-8ffd-8c40cea5bb9e-00-3gahccidclukm.sisko.replit.dev`;
     //submit sign up form
     const handleSignUp = async () => {
-        console.log(file);
         try {
             const res = await createUserWithEmailAndPassword(
                 auth,
                 email,
                 password
             );
-            console.log(res.user);
+            console.log(res.user.uid);
 
-            //upload img to backend folder
-            const formData = new FormData();
-            formData.append('image', file);
+            dispatch(saveUser({ userId: res.user.uid, username, file }));
 
-            const uploadImg = await fetch(`${BASE_URL}/upload`, {
-                method: 'POST',
-                body: formData,
-            })
-            const data = await uploadImg.json();
-            console.log("uploaded", data);
+            // //upload img to backend folder
+            // const formData = new FormData();
+            // formData.append('image', file);
 
-            //store filepath and other displayed data to db
-            axios.post(`${BASE_URL}/signup`, {
-                email,
-                filepath: data.fileUrl
-            })
-                .then((response) => console.log(response.data))
-                .catch((error) => console.error(error));
+            // const uploadImg = await fetch(`${BASE_URL}/upload`, {
+            //     method: 'POST',
+            //     body: formData,
+            // })
+            // const data = await uploadImg.json();
+            // console.log("uploaded", data);
+
+            // //store filepath and other displayed data to db
+            // axios.post(`${BASE_URL}/signup`, {
+            //     email,
+            //     filepath: data.fileUrl
+            // })
+            //     .then((response) => console.log(response.data))
+            //     .catch((error) => console.error(error));
 
         } catch (error) {
             console.error(error);
@@ -79,6 +84,7 @@ export default function Login() {
                         <Image src='/src/assets/logo.png' style={{ height: '110px', width: '210px' }} />
                         <Form onSubmit={handleLogin}>
                             <h2 className='mt-0 mb-3'>Login Account</h2>
+
                             <Form.Group className='mt-3'>
                                 <Form.Label>Email</Form.Label>
                                 <Form.Control
@@ -122,6 +128,16 @@ export default function Login() {
                     <Modal.Title>Sign Up New Account</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <Form.Group className='mt-3'>
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control
+                            type='text'
+                            onChange={e => setUsername(e.target.value)}
+                            value={username}
+                            required
+                        />
+                    </Form.Group>
+
                     <Form.Group>
                         <Form.Label>Email Address</Form.Label>
                         <Form.Control

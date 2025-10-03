@@ -24,9 +24,15 @@ export default function Bookings() {
 
     const handleAddBooking = (e) => {
         e.preventDefault();
-        console.log(time);
-        console.log(date);
-        console.log(room);
+        console.log(typeof(time))
+        console.log(time + duration);
+        // const data = {
+        //     title,
+        //     description,
+        //     date,
+        //     start_time: time,
+        // }
+        // axios.post(`${BASE_URL}/bookings`)
     }
 
     return (
