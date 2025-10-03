@@ -1,11 +1,13 @@
-import { Container, Button, Modal, Form } from 'react-bootstrap'
+import { Container, Button, Modal, Form, Toast } from 'react-bootstrap'
 import { useState, useEffect } from 'react';
 
 import { BASE_URL } from '../pages/Home';
 import axios from 'axios';
 
-export default function Bookings() {
+export default function Bookings({ email }) {
     const [showModal, setShowModal] = useState(false);
+    const [showToast, setShowToast] = useState(false);
+    const [message, setMessage] = useState("null");
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -22,17 +24,46 @@ export default function Bookings() {
             .catch((error) => console.log(error));
     }, [])
 
+    // const handleOpenToast = () => setShowToast(true);
+    const handleCloseToast = () => setShowToast(false);
+
     const handleAddBooking = (e) => {
         e.preventDefault();
-        console.log(typeof(time))
-        console.log(time + duration);
-        // const data = {
-        //     title,
-        //     description,
-        //     date,
-        //     start_time: time,
-        // }
-        // axios.post(`${BASE_URL}/bookings`)
+        const checkTime = new Date(`${date}T${time}`)
+        if (checkTime >= Date.now()) {
+            const data = {
+                title,
+                description,
+                date,
+                start_time: time,
+                duration,
+                phone_number: phoneNum,
+                user_email: email,
+                room_id: room
+            }
+            axios.post(`${BASE_URL}/bookings`, data)
+                .then((response) => console.log(response.data))
+                .catch((error) => console.error(error));
+
+            //reset all values
+            setTitle("");
+            setDescription("");
+            setDate(null);
+            setTime(null);
+            setDuration(0);
+            setPhoneNum("");
+            setRoom(null);
+
+            //close new booking modal
+            setShowModal(false);
+
+            //successful message
+            setMessage("New Booking created successfully");
+        } else {
+            setMessage("Schedule not available")
+        }
+        setShowModal(false);
+        setShowToast(true);
     }
 
     return (
@@ -130,6 +161,16 @@ export default function Bookings() {
                     </Form>
                 </Modal.Body>
             </Modal>
+
+            <Toast
+                show={showToast}
+                onClose={handleCloseToast}
+                animation={true}
+                className='mt-2'
+            >
+                <Toast.Header>Message</Toast.Header>
+                <Toast.Body>{message}</Toast.Body>
+            </Toast>
         </>
     )
 }

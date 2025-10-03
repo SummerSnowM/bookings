@@ -11,6 +11,7 @@ export default function LandingPage() {
                     <Col sm={6}>
                         <h1 className='mt-5'>Work Smart, Work Comfortably, Stay Productive!</h1>
                         <p className='mt-3'>We believe that a good working environment motivates everybody and improve productivity, hence this co-working space booking plans to serve that purpose!</p>
+                        <p className='mt-2'>This space will be opened 24 hours everyday in order to provide you flexibility to freely schedule your working time!</p>
                     </Col>
                 </Row>
 

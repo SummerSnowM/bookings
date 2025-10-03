@@ -1,5 +1,4 @@
 import { Container, Row, Col, Image, Nav } from 'react-bootstrap'
-// import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from '../features/usersSlice';
 import { useContext, useState, useEffect } from 'react';
@@ -12,7 +11,7 @@ export const BASE_URL = `https://f15abb20-13e0-45b3-8ffd-8c40cea5bb9e-00-3gahcci
 export default function Home() {
     const { currentUser } = useContext(AuthContext);
 
-    const [bookings, setBookings] = useState(false);
+    const [bookings, setBookings] = useState(true);
     const [history, setHistory] = useState(false);
 
     const user = useSelector((state) => state.users);
@@ -58,7 +57,7 @@ export default function Home() {
                     <hr className='mt-3' />
                 </Row>
 
-                {bookings && <Bookings />}
+                {bookings && <Bookings email={currentUser.email} />}
                 {history && <History />}
             </Container >
         </>
