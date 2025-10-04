@@ -28,8 +28,6 @@ export default function App() {
             <Navbar.Brand as={Link} to='/'><strong>Office Fusion</strong></Navbar.Brand>
             <Nav className='me-auto'>
               <Nav.Link as={Link} to='/home'>Home</Nav.Link>
-              <Nav.Link>Bookings</Nav.Link>
-              <Nav.Link>Rooms</Nav.Link>
               <Nav.Link onClick={() => {
                 if (currentUser) {
                   auth.signOut()

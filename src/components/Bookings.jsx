@@ -22,7 +22,6 @@ export default function Bookings({ email }) {
 
     const [bookings, setBookings] = useState([]);
 
-
     useEffect(() => {
         //get all room types for adding new booking
         axios.get(`${BASE_URL}/roomtypes`)

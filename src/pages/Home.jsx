@@ -1,11 +1,14 @@
-import { Container, Row, Col, Image, Nav } from 'react-bootstrap'
+import { Container, Row, Col, Image, Nav, Card, Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from '../features/usersSlice';
 import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../components/AuthProvider';
 
+import axios from 'axios';
+
 import Bookings from '../components/Bookings'
 import History from '../components/History';
+import BookingPostCard from '../components/BookingPostCard';
 
 export const BASE_URL = `https://f15abb20-13e0-45b3-8ffd-8c40cea5bb9e-00-3gahccidclukm.sisko.replit.dev`;
 export default function Home() {
@@ -14,17 +17,38 @@ export default function Home() {
     const [bookings, setBookings] = useState([]);
     const [history, setHistory] = useState(false);
 
+    const [filter, setFilter] = useState(false);
+    const [filteredBookings, setFilteredBookings] = useState([]);
+    const [date, setDate] = useState(null);
+
     const user = useSelector((state) => state.users);
     const dispatch = useDispatch();
 
     const handleBookings = () => {
+        setFilter(false);
         setHistory(false);
         setBookings(true);
     }
 
     const handleHistory = () => {
+        setFilter(false);
         setBookings(false);
         setHistory(true);
+    }
+
+    const handleFilter = (date) => {
+        setFilter(true);
+        setBookings(false);
+        setHistory(false);
+        axios.get(`${BASE_URL}/bookings/${date}/${currentUser?.email}`)
+            .then((response) => {
+                console.log(response.data)
+                setFilteredBookings(response.data.data)
+            })
+            .catch((error) => console.error(error));
+
+        //reset date value
+        setDate(null);
     }
 
     useEffect(() => {
@@ -55,8 +79,30 @@ export default function Home() {
                     </Nav>
                     <hr className='mt-3' />
                 </Row>
+
+                <Card className='mb-3 w-50' bg='light'>
+                    <Card.Body>
+                        <Form onSubmit={(e) => {
+                            e.preventDefault();
+                            handleFilter(date);
+                        }}>
+                            <Form.Group>
+                                <Form.Label>Date</Form.Label>
+                                <Form.Control
+                                    type='date'
+                                    value={date}
+                                    onChange={(e) => setDate(e.target.value)}
+                                    className='w-50'
+                                />
+                                <Button size='sm' className='mt-2' type='submit'>Filter</Button>
+                            </Form.Group>
+                        </Form>
+                    </Card.Body>
+                </Card>
+
                 {bookings && <Bookings email={currentUser?.email} />}
-                {history && <History email={currentUser?.email}/>}
+                {history && <History email={currentUser?.email} />}
+                {filter && <BookingPostCard bookings={filteredBookings} />}
             </Container >
         </>
     )
