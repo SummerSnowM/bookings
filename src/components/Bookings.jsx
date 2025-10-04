@@ -1,10 +1,11 @@
-import { Container, Button, Modal, Form, Toast } from 'react-bootstrap'
+import { Container, Button, Modal, Form, Toast, ToastContainer } from 'react-bootstrap'
 import { useState, useEffect } from 'react';
 
 import { BASE_URL } from '../pages/Home';
 import axios from 'axios';
 
 import BookingPostCard from './BookingPostCard';
+import Notification from './Notification';
 
 export default function Bookings({ email }) {
     const [showModal, setShowModal] = useState(false);
@@ -176,15 +177,7 @@ export default function Bookings({ email }) {
                 </Modal.Body>
             </Modal>
 
-            <Toast
-                show={showToast}
-                onClose={handleCloseToast}
-                animation={true}
-                className='mt-2'
-            >
-                <Toast.Header>Message</Toast.Header>
-                <Toast.Body>{message}</Toast.Body>
-            </Toast>
+            <Notification message={message} showToast={showToast} handleCloseToast={handleCloseToast} />
         </>
     )
 }

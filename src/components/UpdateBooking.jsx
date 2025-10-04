@@ -3,12 +3,19 @@ import { BASE_URL } from '../pages/Home';
 import { Modal, Form, Button } from 'react-bootstrap'
 import { useState } from 'react';
 
+import Notification from './Notification';
+
 export default function UpdateBooking({ booking, show, handleClose }) {
     const dateConvert = new Date(booking.date).toLocaleDateString();
     const [date, setDate] = useState(dateConvert);
 
     const [time, setTime] = useState(booking.start_time);
     const [duration, setDuration] = useState(booking.duration);
+
+    const [message, setMessage] = useState("");
+    const [showToast, setShowToast] = useState(false);
+
+    const handleCloseToast = () => setShowToast(false);
 
     const handleUpdate = (id) => {
         const checkTime = new Date(`${date}T${time}`);
@@ -20,16 +27,19 @@ export default function UpdateBooking({ booking, show, handleClose }) {
             }
 
             axios.put(`${BASE_URL}/bookings/${id}`, data)
-                .then((response) => console.log(response.data))
+                .then((response) => setMessage(response.data.message))
                 .catch((error) => console.error(error));
-
+                
             //reset values
             setDate(null);
             setTime(null);
             setDuration(0);
+        } else {
+            setMessage('Schedule not available!');
         }
+        setShowToast(true);
         //close the modal
-        handleClose();
+        setTimeout(() => handleClose(), 2000);
     }
 
     return (
@@ -86,6 +96,8 @@ export default function UpdateBooking({ booking, show, handleClose }) {
                     </Form>
                 </Modal.Body>
             </Modal >
+
+            <Notification message={message} showToast={showToast} handleCloseToast={handleCloseToast} />
         </>
     )
 }

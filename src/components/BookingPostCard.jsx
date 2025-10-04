@@ -1,12 +1,19 @@
 import { Card, Button, Badge } from 'react-bootstrap';
 import { useState } from 'react';
 import { BASE_URL } from '../pages/Home';
+
 import UpdateBooking from './UpdateBooking'
+import Notification from './Notification';
 import axios from 'axios';
 
 export default function BookingPostCard({ bookings }) {
     const [showModal, setShowModal] = useState(false);
     const [editBooking, setEditBooking] = useState(null);
+
+    const [message, setMessage] = useState("");
+    const [showToast, setShowToast] = useState(false);
+
+    const handleCloseToast = () => setShowToast(false);
 
     const handleOpenModal = (booking) => {
         setEditBooking(booking);
@@ -19,8 +26,12 @@ export default function BookingPostCard({ bookings }) {
 
     const handleDeleteBooking = (id) => {
         axios.delete(`${BASE_URL}/bookings/${id}`)
-            .then((response) => console.log(response.data.message))
+            .then((response) => {
+                setMessage(response.data.message)
+            })
             .catch((error) => console.error(error));
+
+        setShowToast(true);
     }
 
     return (
@@ -72,6 +83,8 @@ export default function BookingPostCard({ bookings }) {
             {showModal && (
                 <UpdateBooking show={showModal} booking={editBooking} handleClose={handleCloseModal} />
             )}
+
+            <Notification message={message} showToast={showToast} handleCloseToast={handleCloseToast} />
 
         </>
     )
