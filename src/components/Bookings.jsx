@@ -36,9 +36,7 @@ export default function Bookings({ email }) {
             .then((response) => setBookings(response.data.data))
             .catch((error) => console.error(error));
 
-
-
-    }, [email])
+    }, [email, bookings])
 
     const handleCloseToast = () => setShowToast(false);
 

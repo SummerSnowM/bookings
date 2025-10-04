@@ -6,14 +6,14 @@ import BookingPostCard from './BookingPostCard';
 
 export default function History({ email }) {
     const [history, setHistory] = useState([]);
-    
+
     useEffect(() => {
         //get history bookings
         axios.get(`${BASE_URL}/bookings/${email}`)
             .then((response) => setHistory(response.data.data))
             .catch((error) => console.error(error));
-    }, [email])
-    console.log(history);
+    }, [email, history])
+
     return (
         <>
             <BookingPostCard bookings={history} />
