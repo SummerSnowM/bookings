@@ -18,15 +18,11 @@ export default function LandingPage() {
                 </Row>
 
                 <Row className='mt-5 text-center' sm={12}>
-                    <Col sm={4}>
+                    <Col sm={6}>
                         <i className='bi bi-laptop-fill' style={{ fontSize: '60px' }}></i>
                         <p>Offers rooms of different types from meeting rooms to private rooms to suit your needs!</p>
                     </Col>
-                    <Col sm={4}>
-                        <i className='bi bi-bell-fill' style={{ fontSize: '60px' }}></i>
-                        <p>Notifications to remind you a day earlier before the booking date!</p>
-                    </Col>
-                    <Col sm={4}>
+                    <Col sm={6}>
                         <i className='bi bi-calendar-plus-fill' style={{ fontSize: '60px' }}></i>
                         <p>Create and updating bookings to suit yours and team's schedule!</p>
                     </Col>

@@ -19,6 +19,8 @@ export default function UpdateBooking({ booking, show, handleClose }) {
 
     const handleUpdate = (id) => {
         const checkTime = new Date(`${date}T${time}`);
+        
+        //check if time has passed, if not passed, allow user to update
         if (checkTime >= Date.now()) {
             const data = {
                 start_time: time,

@@ -42,6 +42,8 @@ export default function Home() {
         setFilter(true);
         setBookings(false);
         setHistory(false);
+
+        //get bookings by specific email
         axios.get(`${BASE_URL}/bookings/${date}/${currentUser?.email}`)
             .then((response) => {
                 console.log(response.data)
@@ -53,6 +55,7 @@ export default function Home() {
         setDate(null);
     }
 
+    //navigate user to login page if not logged in yet
     useEffect(() => {
         if (!currentUser?.uid) {
             navigate('/login');

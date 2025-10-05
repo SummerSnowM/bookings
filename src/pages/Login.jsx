@@ -1,6 +1,5 @@
 import { Container, Row, Col, Image, Form, Button, Modal } from 'react-bootstrap';
 
-// import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { saveUser } from '../features/usersSlice';
 import {
@@ -27,6 +26,7 @@ export default function Login() {
     const auth = getAuth();
     const { currentUser } = useContext(AuthContext);
 
+    //navigate user to home page if logged in
     useEffect(() => {
         if (currentUser) navigate('/home');
     }, [currentUser, navigate])

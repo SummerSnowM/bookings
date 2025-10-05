@@ -37,7 +37,7 @@ export default function BookingPostCard({ bookings }) {
     return (
         <>
             {bookings ? bookings.map((booking, index) => {
-                //[22, 10, 00]
+                //[22, 10, 00] = 22:10:00
                 const [hours, minutes, seconds] = booking.start_time.split(':');
 
                 //date without timestamp
