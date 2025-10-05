@@ -1,4 +1,5 @@
 import { Container, Row, Col, Image, Nav, Card, Form, Button } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchUser } from '../features/usersSlice';
 import { useContext, useState, useEffect } from 'react';
@@ -23,6 +24,7 @@ export default function Home() {
 
     const user = useSelector((state) => state.users);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleBookings = () => {
         setFilter(false);
@@ -52,8 +54,13 @@ export default function Home() {
     }
 
     useEffect(() => {
-        dispatch(fetchUser({ userId: currentUser?.uid }));
-    }, [currentUser, dispatch])
+        if (!currentUser?.uid) {
+            navigate('/login');
+        } else {
+            dispatch(fetchUser({ userId: currentUser?.uid }));
+        }
+
+    }, [currentUser, dispatch, navigate])
 
     return (
         <>
