@@ -1,12 +1,14 @@
 import { Row, Col, Container, Image } from 'react-bootstrap';
 
+import landingWallpaper from '../assets/landing-wallpaper.jpg'
+
 export default function LandingPage() {
     return (
         <>
             <Container className='mt-5 pt-5' >
                 <Row className='g-5 align-items-center'>
                     <Col sm={6}>
-                        <Image src='/src/assets/landing-wallpaper.jpg' className='rounded-5' style={{ width: '500px' }} />
+                        <Image src={landingWallpaper} className='rounded-5' style={{ width: '500px' }} />
                     </Col>
                     <Col sm={6}>
                         <h1 className='mt-5'>Work Smart, Work Comfortably, Stay Productive!</h1>

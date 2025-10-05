@@ -12,6 +12,9 @@ import { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../components/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 
+import logo from '../assets/logo.png'
+import coworkingWallpaper from '../assets/coworking-wallpaper.jpg'
+
 export default function Login() {
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
@@ -38,7 +41,6 @@ export default function Login() {
         }
     };
 
-    const BASE_URL = `https://f15abb20-13e0-45b3-8ffd-8c40cea5bb9e-00-3gahccidclukm.sisko.replit.dev`;
     //submit sign up form
     const handleSignUp = async () => {
         try {
@@ -47,28 +49,7 @@ export default function Login() {
                 email,
                 password
             );
-            console.log(res.user.uid);
-
             dispatch(saveUser({ userId: res.user.uid, username, file }));
-
-            // //upload img to backend folder
-            // const formData = new FormData();
-            // formData.append('image', file);
-
-            // const uploadImg = await fetch(`${BASE_URL}/upload`, {
-            //     method: 'POST',
-            //     body: formData,
-            // })
-            // const data = await uploadImg.json();
-            // console.log("uploaded", data);
-
-            // //store filepath and other displayed data to db
-            // axios.post(`${BASE_URL}/signup`, {
-            //     email,
-            //     filepath: data.fileUrl
-            // })
-            //     .then((response) => console.log(response.data))
-            //     .catch((error) => console.error(error));
 
         } catch (error) {
             console.error(error);
@@ -81,7 +62,7 @@ export default function Login() {
             <Container className='d-flex justify-content-center align-items-center'>
                 <Row className='mt-5 mb-5 bg-light rounded-5 p-3'>
                     <Col xs={6}>
-                        <Image src='/src/assets/logo.png' style={{ height: '110px', width: '210px' }} />
+                        <Image src={logo} style={{ height: '110px', width: '210px' }} />
                         <Form onSubmit={handleLogin}>
                             <h2 className='mt-0 mb-3'>Login Account</h2>
 
@@ -113,7 +94,7 @@ export default function Login() {
                         </Form>
                     </Col>
                     <Col xs={6}>
-                        <Image className='mt-3' src='/src/assets/coworking-wallpaper.jpg' style={{ maxHeight: '100%', width: '100%' }} />
+                        <Image className='mt-3' src={coworkingWallpaper} style={{ maxHeight: '100%', width: '100%' }} />
                     </Col>
                 </Row>
             </Container>
