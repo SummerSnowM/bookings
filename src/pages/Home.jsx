@@ -10,7 +10,7 @@ import Bookings from '../components/Bookings'
 import History from '../components/History';
 import BookingPostCard from '../components/BookingPostCard';
 
-export const BASE_URL = `https://f15abb20-13e0-45b3-8ffd-8c40cea5bb9e-00-3gahccidclukm.sisko.replit.dev`;
+export const BASE_URL = `https://bookings-api-zimo.vercel.app`;
 export default function Home() {
     const { currentUser } = useContext(AuthContext);
 
